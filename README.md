@@ -105,6 +105,4 @@ public static void main(String[] args) {
 ## Conclusion
 
 Thank you for using the CV Generator Application! This project helps you practice Java programming while creating a useful tool. Keep coding, stay curious, and enjoy the journey of programming! Happy coding!
-```
-
-Once you have this content saved as `README.md`, you can proceed to upload it to your GitHub repository as described in the steps above.
+``
