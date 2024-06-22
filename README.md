@@ -1,3 +1,6 @@
+Here is the README content in Markdown format for the `CVGeneratorApp` Java code:
+
+```markdown
 # CV Generator Application
 
 ## Introduction
@@ -42,67 +45,137 @@ Before running the project, ensure you have the following:
 Here is a brief explanation of the key lines in the CV Generator Application:
 
 ```java
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-```
-- These import statements bring in the necessary classes from the iText library and Java standard library to handle PDF creation and user input.
+package cvgeneratorapp;
 
-```java
-public class CVGeneratorApp {
+//importing all the required packages
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.kernel.pdf.PdfWriter;
+//For Importing upper 2 packages we need to add itextpdf JAR to our class directory
+import java.io.ByteArrayInputStream;
+//Allows reading data as a stream of bytes from a byte array.
+import java.io.IOException;
+//For Handling IO Exception
+import java.nio.charset.StandardCharsets;
+// Defines constant values for various character sets.
+import java.util.Scanner;
+//For taking input from the user
+
+public class CVGeneratorApp {  
+    //declare variables to store user input
     private String fullName, address, phone, email, linkedin, website;
     private String degree, institution, eduLocation, graduation;
     private String jobTitle, company, workLocation, employmentDates, responsibilities;
-```
-- Declaration of private variables to store user input for different sections of the CV.
 
-```java
-public CVGeneratorApp() {
-    Scanner scanner = new Scanner(System.in);
-    // Code to collect user input
-}
-```
-- Constructor of the `CVGeneratorApp` class where a `Scanner` object is used to collect user input.
+    public CVGeneratorApp() {
+        Scanner scanner = new Scanner(System.in);
 
-```java
-private void saveCVToPDF() throws FileNotFoundException {
-    String dest = "CV.pdf";
-    PdfWriter writer = new PdfWriter(dest);
-    PdfDocument pdfDoc = new PdfDocument(writer);
-    try (Document document = new Document(pdfDoc)) {
-        document.add(new Paragraph("CV Data"));
-        document.add(new Paragraph("Full Name: " + fullName));
-        document.add(new Paragraph("Address: " + address));
-        document.add(new Paragraph("Phone: " + phone));
-        document.add(new Paragraph("Email: " + email));
-        document.add(new Paragraph("LinkedIn: " + linkedin));
-        document.add(new Paragraph("Website: " + website));
-        document.add(new Paragraph("Degree: " + degree));
-        document.add(new Paragraph("Institution: " + institution));
-        document.add(new Paragraph("Location of Institution: " + eduLocation));
-        document.add(new Paragraph("Year of Graduation: " + graduation));
-        document.add(new Paragraph("Job Title: " + jobTitle));
-        document.add(new Paragraph("Company Name: " + company));
-        document.add(new Paragraph("Location of Company: " + workLocation));
-        document.add(new Paragraph("Dates of Employment: " + employmentDates));
-        document.add(new Paragraph("Responsibilities and Achievements: " + responsibilities));
+        // saving Contact Information input by user
+        System.out.print("Enter Full Name: ");
+        fullName = scanner.nextLine();
+
+        System.out.print("Enter Address: ");
+        address = scanner.nextLine();
+
+        System.out.print("Enter Phone Number: ");
+        phone = scanner.nextLine();
+
+        System.out.print("Enter Email Address: ");
+        email = scanner.nextLine();
+
+        System.out.print("Enter LinkedIn Profile: ");
+        linkedin = scanner.nextLine();
+
+        System.out.print("Enter Website/Portfolio: ");
+        website = scanner.nextLine();
+
+        // Saving Education Information input by user
+        System.out.print("Enter Degree: ");
+        degree = scanner.nextLine();
+
+        System.out.print("Enter Institution: ");
+        institution = scanner.nextLine();
+
+        System.out.print("Enter Location of Institution: ");
+        eduLocation = scanner.nextLine();
+
+        System.out.print("Enter Year of Graduation: ");
+        graduation = scanner.nextLine();
+
+        // Saving Work Experience input by user
+        System.out.print("Enter Job Title: ");
+        jobTitle = scanner.nextLine();
+
+        System.out.print("Enter Company Name: ");
+        company = scanner.nextLine();
+
+        System.out.print("Enter Location of Company: ");
+        workLocation = scanner.nextLine();
+
+        System.out.print("Enter Dates of Employment: ");
+        employmentDates = scanner.nextLine();
+
+        System.out.print("Enter Responsibilities and Achievements: ");
+        responsibilities = scanner.nextLine();
+
+        // Close scanner to prevent resource leak
+        scanner.close();
+        //Trying to save input data into pdf
+        try {
+            saveCVToPDF();
+        } catch (IOException e) {
+            System.err.println("Error creating PDF: " + e.getMessage());
+        }
     }
-    System.out.println("CV saved as PDF to " + dest);
+
+    private void saveCVToPDF() throws IOException {
+        // Define the destination file path
+        String dest = "CV.pdf";
+        //Declaring PdfWriter which writes the PDF to specified designation
+        PdfWriter writer = new PdfWriter(dest);
+
+        // Constructing the HTML content with inline CSS styles
+        String htmlContent = "<html><head>" +
+                "<style>" +
+                "body { font-family: Arial, sans-serif; margin: 20px; }" +
+                "h1 { color: #333333; }" +
+                "h2 { color: #555555; }" +
+                "p { margin-bottom: 10px; }" +
+                "strong { color: #007bff; }" +
+                "</style>" +
+                "</head><body>" +
+                "<h1>CV Data</h1>" +
+                "<h2>Contact Information</h2>" +
+                "<p><strong>Full Name:</strong> " + fullName + "</p>" +
+                "<p><strong>Address:</strong> " + address + "</p>" +
+                "<p><strong>Phone:</strong> " + phone + "</p>" +
+                "<p><strong>Email:</strong> " + email + "</p>" +
+                "<p><strong>LinkedIn:</strong> " + linkedin + "</p>" +
+                "<p><strong>Website:</strong> " + website + "</p>" +
+                "<h2>Education Information</h2>" +
+                "<p><strong>Degree:</strong> " + degree + "</p>" +
+                "<p><strong>Institution:</strong> " + institution + "</p>" +
+                "<p><strong>Location:</strong> " + eduLocation + "</p>" +
+                "<p><strong>Year of Graduation:</strong> " + graduation + "</p>" +
+                "<h2>Work Experience</h2>" +
+                "<p><strong>Job Title:</strong> " + jobTitle + "</p>" +
+                "<p><strong>Company Name:</strong> " + company + "</p>" +
+                "<p><strong>Location of Company:</strong> " + workLocation + "</p>" +
+                "<p><strong>Dates of Employment:</strong> " + employmentDates + "</p>" +
+                "<p><strong>Responsibilities and Achievements:</strong> " + responsibilities + "</p>" +
+                "</body></html>";
+
+        // Converting HTML content to PDF
+        HtmlConverter.convertToPdf(new ByteArrayInputStream(htmlContent.getBytes(StandardCharsets.UTF_8)), writer);
+
+        System.out.println("CV saved as PDF to " + dest);
+    }
+
+    public static void main(String[] args) {
+        CVGeneratorApp cvGeneratorApp = new CVGeneratorApp();
+    }
 }
 ```
-- The `saveCVToPDF` method creates a PDF file using the iText library. It initializes a `PdfWriter` and `PdfDocument`, and then adds paragraphs with the user-provided data to the PDF document.
-
-```java
-public static void main(String[] args) {
-    CVGeneratorApp cvGeneratorApp = new CVGeneratorApp();
-}
-```
-- The `main` method instantiates the `CVGeneratorApp` class, triggering the constructor and subsequently generating the PDF.
-
 ## Conclusion
 
 Thank you for using the CV Generator Application! This project helps you practice Java programming while creating a useful tool. Keep coding, stay curious, and enjoy the journey of programming! Happy coding!
-``
+```
